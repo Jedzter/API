@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pokepedia</title>
+    </head>
+    <body onload="PokeSearch()">
+    <h1>Pokepedia</h1>
+
+          <div class="container">
+            <div class="pokeinfo">
+              
+                <h2 class="text-center">Search For Any Pokemon!</h2>
+                <h4 class="text-center">Example, try typing in pikachu! or any of your favorite pokemon</h4>
+                <form id="pokeForm" action="#pokeDetails-page" method="post">
+                    <input type="text" class="form-control" name="pokeInsert" id="pokeInsert" placeholder="Pokemon Search" value="" >
+                </form>
+                <div><a class="ui-btn" onclick="PokeSearch();"></div>
+                <button type="submit"  id="button" onclick="PokeSearch();" >Search</button>
+             
+            </div>
+        </div>
+
+        
+
+        <div class="elements">
+                <div id="pokephoto"></div>
+                <div id="pokename"></div>
+                <div id="firsttype"></div>
+                <div id="secondtype"></div>
+                <div id="pokeability"></div>
+     </div>
+        
+        <script language="javascript">
+            function PokeSearch(){
+                
+                var param = document.getElementById("pokeInsert").value;
+                request = new XMLHttpRequest();
+                
+                request.open('GET', 'https://pokeapi.co/api/v2/pokemon/'+param, true);
+                request.onload = function(data) {
+                if (request.status >= 200 && request.status < 400) {
+                    response = request.responseText;
+                    var data = JSON.parse(response);
+                    
+                    console.log('response from XMLHttpRequest');
+                    console.log(data);
+
+                    var secondtype;
+
+                    if (data.types.length == 2) {
+                        secondtype = data.types[1].type.name;
+                        
+                    }
+                   
+                    document.getElementById("pokename").innerHTML = "Pokemon Name: " + data.name;
+                    document.getElementById("pokephoto").innerHTML = '<img src="' + data.sprites.front_default +'">';
+                    document.getElementById("firsttype").innerHTML = "Pokemon Type1: " + data.types[0].type.name;
+                    document.getElementById("secondtype").innerHTML = "Pokemon Type2: " + secondtype;
+                
+                   
+                } 
+                else {
+                   
+                }
+                };
+                request.onerror = function() {
+                
+                };
+              
+                request.send();
+
+            }
+          
+        </script>
+    </body>
+
+</html>
